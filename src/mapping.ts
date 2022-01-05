@@ -26,6 +26,7 @@ export function handleMessageSent(event: MessageSent): void {
   // Entity fields can be set based on event parameters
   entity.msg_id = event.params.msg_id;
   entity._receiver = event.params.receiver;
+  entity._uri = event.params.uri;
 
   // Entities can be written to the store with `.save()`
   entity.save();
