@@ -5,12 +5,16 @@ import { Message } from "../generated/schema";
 export function handleMessageSent(event: MessageSent): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let entity = Message.load(event.transaction.from.toHex());
+  let entity = Message.load(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  );
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (!entity) {
-    entity = new Message(event.transaction.from.toHex());
+    entity = new Message(
+      event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+    );
 
     // Entity fields can be set using simple assignments
     entity.messageCount = BigInt.fromI32(0);
