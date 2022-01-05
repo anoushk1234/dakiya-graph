@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ maverick/dakiya",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ anoushk1234/onchain-dakiya",
     "create-local": "graph create --node http://localhost:8020/ maverick/dakiya",
     "remove-local": "graph remove --node http://localhost:8020/ maverick/dakiya",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 maverick/dakiya"
