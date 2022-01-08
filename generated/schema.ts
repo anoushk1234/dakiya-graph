@@ -16,10 +16,10 @@ export class Message extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("messageCount", Value.fromBigInt(BigInt.zero()));
-    this.set("msg_id", Value.fromBigInt(BigInt.zero()));
     this.set("_receiver", Value.fromBytes(Bytes.empty()));
     this.set("_uri", Value.fromString(""));
+    this.set("_sender", Value.fromBytes(Bytes.empty()));
+    this.set("_timestamp", Value.fromString(""));
   }
 
   save(): void {
@@ -48,24 +48,6 @@ export class Message extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get messageCount(): BigInt {
-    let value = this.get("messageCount");
-    return value!.toBigInt();
-  }
-
-  set messageCount(value: BigInt) {
-    this.set("messageCount", Value.fromBigInt(value));
-  }
-
-  get msg_id(): BigInt {
-    let value = this.get("msg_id");
-    return value!.toBigInt();
-  }
-
-  set msg_id(value: BigInt) {
-    this.set("msg_id", Value.fromBigInt(value));
-  }
-
   get _receiver(): Bytes {
     let value = this.get("_receiver");
     return value!.toBytes();
@@ -82,5 +64,23 @@ export class Message extends Entity {
 
   set _uri(value: string) {
     this.set("_uri", Value.fromString(value));
+  }
+
+  get _sender(): Bytes {
+    let value = this.get("_sender");
+    return value!.toBytes();
+  }
+
+  set _sender(value: Bytes) {
+    this.set("_sender", Value.fromBytes(value));
+  }
+
+  get _timestamp(): string {
+    let value = this.get("_timestamp");
+    return value!.toString();
+  }
+
+  set _timestamp(value: string) {
+    this.set("_timestamp", Value.fromString(value));
   }
 }

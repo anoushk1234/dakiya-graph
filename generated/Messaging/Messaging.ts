@@ -23,11 +23,11 @@ export class MessageSent__Params {
     this._event = event;
   }
 
-  get msg_id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get receiver(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 
-  get receiver(): Address {
+  get sender(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -40,56 +40,58 @@ export class MessageSent__Params {
   }
 }
 
-export class Messaging__allMessagesResultValue0Struct extends ethereum.Tuple {
-  get msg_id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get sender(): Address {
-    return this[1].toAddress();
-  }
-
+export class Messaging__getMessagesResultValue0Struct extends ethereum.Tuple {
   get receiver(): Address {
-    return this[2].toAddress();
+    return this[0].toAddress();
   }
 
   get uri(): string {
-    return this[3].toString();
+    return this[1].toString();
   }
 
   get timestamp(): BigInt {
-    return this[4].toBigInt();
+    return this[2].toBigInt();
+  }
+}
+
+export class Messaging__getThreadResultValue0Struct extends ethereum.Tuple {
+  get thread_id(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get receiver(): Address {
+    return this[1].toAddress();
+  }
+
+  get receiver_key(): string {
+    return this[2].toString();
+  }
+
+  get sender(): Address {
+    return this[3].toAddress();
+  }
+
+  get sender_key(): string {
+    return this[4].toString();
   }
 }
 
 export class Messaging__messagesResult {
-  value0: BigInt;
-  value1: Address;
-  value2: Address;
-  value3: string;
-  value4: BigInt;
+  value0: Address;
+  value1: string;
+  value2: BigInt;
 
-  constructor(
-    value0: BigInt,
-    value1: Address,
-    value2: Address,
-    value3: string,
-    value4: BigInt
-  ) {
+  constructor(value0: Address, value1: string, value2: BigInt) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
-    this.value3 = value3;
-    this.value4 = value4;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromAddress(this.value2));
-    map.set("value3", ethereum.Value.fromString(this.value3));
-    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     return map;
   }
 }
@@ -99,90 +101,111 @@ export class Messaging extends ethereum.SmartContract {
     return new Messaging("Messaging", address);
   }
 
-  allMessages(
-    _receiver: Address
-  ): Array<Messaging__allMessagesResultValue0Struct> {
-    let result = super.call(
-      "allMessages",
-      "allMessages(address):((uint256,address,address,string,uint256)[])",
-      [ethereum.Value.fromAddress(_receiver)]
-    );
+  getAllThreads(): Array<BigInt> {
+    let result = super.call("getAllThreads", "getAllThreads():(uint256[])", []);
 
-    return result[0].toTupleArray<Messaging__allMessagesResultValue0Struct>();
+    return result[0].toBigIntArray();
   }
 
-  try_allMessages(
-    _receiver: Address
-  ): ethereum.CallResult<Array<Messaging__allMessagesResultValue0Struct>> {
+  try_getAllThreads(): ethereum.CallResult<Array<BigInt>> {
     let result = super.tryCall(
-      "allMessages",
-      "allMessages(address):((uint256,address,address,string,uint256)[])",
-      [ethereum.Value.fromAddress(_receiver)]
+      "getAllThreads",
+      "getAllThreads():(uint256[])",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  getMessages(
+    thread_id: BigInt
+  ): Array<Messaging__getMessagesResultValue0Struct> {
+    let result = super.call(
+      "getMessages",
+      "getMessages(uint256):((address,string,uint256)[])",
+      [ethereum.Value.fromUnsignedBigInt(thread_id)]
+    );
+
+    return result[0].toTupleArray<Messaging__getMessagesResultValue0Struct>();
+  }
+
+  try_getMessages(
+    thread_id: BigInt
+  ): ethereum.CallResult<Array<Messaging__getMessagesResultValue0Struct>> {
+    let result = super.tryCall(
+      "getMessages",
+      "getMessages(uint256):((address,string,uint256)[])",
+      [ethereum.Value.fromUnsignedBigInt(thread_id)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<Messaging__allMessagesResultValue0Struct>()
+      value[0].toTupleArray<Messaging__getMessagesResultValue0Struct>()
     );
   }
 
-  messageCount(): BigInt {
-    let result = super.call("messageCount", "messageCount():(uint256)", []);
+  getThread(thread_id: BigInt): Messaging__getThreadResultValue0Struct {
+    let result = super.call(
+      "getThread",
+      "getThread(uint256):((uint256,address,string,address,string))",
+      [ethereum.Value.fromUnsignedBigInt(thread_id)]
+    );
 
-    return result[0].toBigInt();
+    return changetype<Messaging__getThreadResultValue0Struct>(
+      result[0].toTuple()
+    );
   }
 
-  try_messageCount(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("messageCount", "messageCount():(uint256)", []);
+  try_getThread(
+    thread_id: BigInt
+  ): ethereum.CallResult<Messaging__getThreadResultValue0Struct> {
+    let result = super.tryCall(
+      "getThread",
+      "getThread(uint256):((uint256,address,string,address,string))",
+      [ethereum.Value.fromUnsignedBigInt(thread_id)]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(
+      changetype<Messaging__getThreadResultValue0Struct>(value[0].toTuple())
+    );
   }
 
-  messageURI(_msg_id: BigInt): string {
-    let result = super.call("messageURI", "messageURI(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(_msg_id)
-    ]);
-
-    return result[0].toString();
-  }
-
-  try_messageURI(_msg_id: BigInt): ethereum.CallResult<string> {
-    let result = super.tryCall("messageURI", "messageURI(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(_msg_id)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  messages(param0: BigInt): Messaging__messagesResult {
+  messages(param0: BigInt, param1: BigInt): Messaging__messagesResult {
     let result = super.call(
       "messages",
-      "messages(uint256):(uint256,address,address,string,uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      "messages(uint256,uint256):(address,string,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
     );
 
     return new Messaging__messagesResult(
-      result[0].toBigInt(),
-      result[1].toAddress(),
-      result[2].toAddress(),
-      result[3].toString(),
-      result[4].toBigInt()
+      result[0].toAddress(),
+      result[1].toString(),
+      result[2].toBigInt()
     );
   }
 
-  try_messages(param0: BigInt): ethereum.CallResult<Messaging__messagesResult> {
+  try_messages(
+    param0: BigInt,
+    param1: BigInt
+  ): ethereum.CallResult<Messaging__messagesResult> {
     let result = super.tryCall(
       "messages",
-      "messages(uint256):(uint256,address,address,string,uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      "messages(uint256,uint256):(address,string,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -190,40 +213,40 @@ export class Messaging extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new Messaging__messagesResult(
-        value[0].toBigInt(),
-        value[1].toAddress(),
-        value[2].toAddress(),
-        value[3].toString(),
-        value[4].toBigInt()
+        value[0].toAddress(),
+        value[1].toString(),
+        value[2].toBigInt()
       )
     );
   }
 
-  receiverToMessages(param0: Address, param1: BigInt): BigInt {
-    let result = super.call(
-      "receiverToMessages",
-      "receiverToMessages(address,uint256):(uint256)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
-    );
+  messagesIndex(): BigInt {
+    let result = super.call("messagesIndex", "messagesIndex():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try_receiverToMessages(
-    param0: Address,
-    param1: BigInt
-  ): ethereum.CallResult<BigInt> {
+  try_messagesIndex(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "receiverToMessages",
-      "receiverToMessages(address,uint256):(uint256)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+      "messagesIndex",
+      "messagesIndex():(uint256)",
+      []
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  threadCount(): BigInt {
+    let result = super.call("threadCount", "threadCount():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_threadCount(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("threadCount", "threadCount():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -249,12 +272,24 @@ export class SendMessageCall__Inputs {
     this._call = call;
   }
 
+  get _thread_id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
   get _uri(): string {
-    return this._call.inputValues[0].value.toString();
+    return this._call.inputValues[1].value.toString();
   }
 
   get _receiver(): Address {
-    return this._call.inputValues[1].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _sender_key(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+
+  get _receiver_key(): string {
+    return this._call.inputValues[4].value.toString();
   }
 }
 

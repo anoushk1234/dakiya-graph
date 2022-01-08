@@ -4,14 +4,14 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "msg_id",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "receiver",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -31,18 +31,45 @@
     "type": "event"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "_receiver", "type": "address" }
+    "inputs": [],
+    "name": "getAllThreads",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
     ],
-    "name": "allMessages",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "thread_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMessages",
     "outputs": [
       {
         "components": [
-          { "internalType": "uint256", "name": "msg_id", "type": "uint256" },
-          { "internalType": "address", "name": "sender", "type": "address" },
-          { "internalType": "address", "name": "receiver", "type": "address" },
-          { "internalType": "string", "name": "uri", "type": "string" },
-          { "internalType": "uint256", "name": "timestamp", "type": "uint256" }
+          {
+            "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          }
         ],
         "internalType": "struct Messaging.Message[]",
         "name": "",
@@ -53,52 +80,142 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "messageCount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "thread_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "getThread",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "thread_id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "receiver_key",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "sender_key",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct Messaging.Thread",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_msg_id", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
-    "name": "messageURI",
-    "outputs": [{ "internalType": "string", "name": "uri", "type": "string" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "messages",
     "outputs": [
-      { "internalType": "uint256", "name": "msg_id", "type": "uint256" },
-      { "internalType": "address", "name": "sender", "type": "address" },
-      { "internalType": "address", "name": "receiver", "type": "address" },
-      { "internalType": "string", "name": "uri", "type": "string" },
-      { "internalType": "uint256", "name": "timestamp", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "messagesIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "receiverToMessages",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "string", "name": "_uri", "type": "string" },
-      { "internalType": "address", "name": "_receiver", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_thread_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_uri",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_receiver",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_sender_key",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_receiver_key",
+        "type": "string"
+      }
     ],
     "name": "sendMessage",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "threadCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

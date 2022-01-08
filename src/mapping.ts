@@ -17,17 +17,18 @@ export function handleMessageSent(event: MessageSent): void {
     );
 
     // Entity fields can be set using simple assignments
-    entity.messageCount = BigInt.fromI32(0);
+    // entity.messageCount = BigInt.fromI32(0);
   }
 
   // BigInt and BigDecimal math are supported
-  entity.messageCount = entity.messageCount + BigInt.fromI32(1);
+  // entity.messageCount = entity.messageCount + BigInt.fromI32(1);
 
   // Entity fields can be set based on event parameters
-  entity.msg_id = event.params.msg_id;
+  // entity.msg_id = event.params.msg_id;
   entity._receiver = event.params.receiver;
   entity._uri = event.params.uri;
-
+  entity._timestamp = event.params.timestamp.toString();
+  entity._sender = event.params.sender;
   // Entities can be written to the store with `.save()`
   entity.save();
 

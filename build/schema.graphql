@@ -1,7 +1,7 @@
 type Message @entity {
   id: ID!
-  messageCount: BigInt!
-  msg_id: BigInt!
   _receiver: Bytes! # uint256
   _uri: String! # address
+  _sender: Bytes! # uint256
+  _timestamp: String! # uint256
 }
