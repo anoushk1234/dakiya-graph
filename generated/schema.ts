@@ -19,6 +19,7 @@ export class Message extends Entity {
     this.set("_receiver", Value.fromBytes(Bytes.empty()));
     this.set("_uri", Value.fromString(""));
     this.set("_timestamp", Value.fromString(""));
+    this.set("_sender", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -63,6 +64,89 @@ export class Message extends Entity {
 
   set _uri(value: string) {
     this.set("_uri", Value.fromString(value));
+  }
+
+  get _timestamp(): string {
+    let value = this.get("_timestamp");
+    return value!.toString();
+  }
+
+  set _timestamp(value: string) {
+    this.set("_timestamp", Value.fromString(value));
+  }
+
+  get _sender(): Bytes {
+    let value = this.get("_sender");
+    return value!.toBytes();
+  }
+
+  set _sender(value: Bytes) {
+    this.set("_sender", Value.fromBytes(value));
+  }
+}
+
+export class Thread extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("_receiver", Value.fromBytes(Bytes.empty()));
+    this.set("_sender", Value.fromBytes(Bytes.empty()));
+    this.set("_thread_id", Value.fromBigInt(BigInt.zero()));
+    this.set("_timestamp", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Thread entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Thread entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Thread", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Thread | null {
+    return changetype<Thread | null>(store.get("Thread", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get _receiver(): Bytes {
+    let value = this.get("_receiver");
+    return value!.toBytes();
+  }
+
+  set _receiver(value: Bytes) {
+    this.set("_receiver", Value.fromBytes(value));
+  }
+
+  get _sender(): Bytes {
+    let value = this.get("_sender");
+    return value!.toBytes();
+  }
+
+  set _sender(value: Bytes) {
+    this.set("_sender", Value.fromBytes(value));
+  }
+
+  get _thread_id(): BigInt {
+    let value = this.get("_thread_id");
+    return value!.toBigInt();
+  }
+
+  set _thread_id(value: BigInt) {
+    this.set("_thread_id", Value.fromBigInt(value));
   }
 
   get _timestamp(): string {

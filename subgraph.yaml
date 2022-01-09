@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Messaging
-    network: ropsten
+    network: rinkeby
     source:
-      address: "0xe76F633649fb4031e2e031b83c03926ABC5AFca6"
+      address: "0xAf591B88f98D506240A73E94bc2Ae1f817c64650"
       abi: Messaging
-      startBlock: 9959596
+      startBlock: 9959955
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -19,6 +19,6 @@ dataSources:
         - name: Messaging
           file: ./abis/Messaging.json
       eventHandlers:
-        - event: MessageSent(address,string,uint256)
+        - event: MessageSent(address,string,uint256,address,uint256)
           handler: handleMessageSent
       file: ./src/mapping.ts

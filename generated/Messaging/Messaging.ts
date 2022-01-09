@@ -34,6 +34,44 @@ export class MessageSent__Params {
   get timestamp(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
+
+  get sender(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+
+  get thread_id(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+}
+
+export class ThreadCreated extends ethereum.Event {
+  get params(): ThreadCreated__Params {
+    return new ThreadCreated__Params(this);
+  }
+}
+
+export class ThreadCreated__Params {
+  _event: ThreadCreated;
+
+  constructor(event: ThreadCreated) {
+    this._event = event;
+  }
+
+  get receiver(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get sender(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get thread_id(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
 }
 
 export class Messaging__getPubEncKeysResult {
