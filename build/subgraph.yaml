@@ -21,4 +21,6 @@ dataSources:
       eventHandlers:
         - event: MessageSent(address,string,uint256,address,uint256)
           handler: handleMessageSent
+        - event: ThreadCreated(address,address,uint256,uint256)
+          handler: handleThreadCreated
       file: Messaging/Messaging.wasm

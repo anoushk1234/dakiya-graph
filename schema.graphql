@@ -2,8 +2,9 @@ type Message @entity {
   id: ID!
   _receiver: Bytes! # uint256
   _uri: String! # address
-  _timestamp: String! # uint256
+  _timestamp: BigInt! # uint256
   _sender: Bytes! # uint256
+  _thread_id: BigInt! # uint256
 }
 
 type Thread @entity {
@@ -11,5 +12,5 @@ type Thread @entity {
   _receiver: Bytes!
   _sender: Bytes!
   _thread_id: BigInt!
-  _timestamp: String!
+  _timestamp: BigInt!
 }

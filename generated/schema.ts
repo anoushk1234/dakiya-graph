@@ -18,8 +18,9 @@ export class Message extends Entity {
 
     this.set("_receiver", Value.fromBytes(Bytes.empty()));
     this.set("_uri", Value.fromString(""));
-    this.set("_timestamp", Value.fromString(""));
+    this.set("_timestamp", Value.fromBigInt(BigInt.zero()));
     this.set("_sender", Value.fromBytes(Bytes.empty()));
+    this.set("_thread_id", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -66,13 +67,13 @@ export class Message extends Entity {
     this.set("_uri", Value.fromString(value));
   }
 
-  get _timestamp(): string {
+  get _timestamp(): BigInt {
     let value = this.get("_timestamp");
-    return value!.toString();
+    return value!.toBigInt();
   }
 
-  set _timestamp(value: string) {
-    this.set("_timestamp", Value.fromString(value));
+  set _timestamp(value: BigInt) {
+    this.set("_timestamp", Value.fromBigInt(value));
   }
 
   get _sender(): Bytes {
@@ -82,6 +83,15 @@ export class Message extends Entity {
 
   set _sender(value: Bytes) {
     this.set("_sender", Value.fromBytes(value));
+  }
+
+  get _thread_id(): BigInt {
+    let value = this.get("_thread_id");
+    return value!.toBigInt();
+  }
+
+  set _thread_id(value: BigInt) {
+    this.set("_thread_id", Value.fromBigInt(value));
   }
 }
 
@@ -93,7 +103,7 @@ export class Thread extends Entity {
     this.set("_receiver", Value.fromBytes(Bytes.empty()));
     this.set("_sender", Value.fromBytes(Bytes.empty()));
     this.set("_thread_id", Value.fromBigInt(BigInt.zero()));
-    this.set("_timestamp", Value.fromString(""));
+    this.set("_timestamp", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -149,12 +159,12 @@ export class Thread extends Entity {
     this.set("_thread_id", Value.fromBigInt(value));
   }
 
-  get _timestamp(): string {
+  get _timestamp(): BigInt {
     let value = this.get("_timestamp");
-    return value!.toString();
+    return value!.toBigInt();
   }
 
-  set _timestamp(value: string) {
-    this.set("_timestamp", Value.fromString(value));
+  set _timestamp(value: BigInt) {
+    this.set("_timestamp", Value.fromBigInt(value));
   }
 }
