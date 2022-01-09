@@ -6,9 +6,9 @@ dataSources:
     name: Messaging
     network: rinkeby
     source:
-      address: "0xAf591B88f98D506240A73E94bc2Ae1f817c64650"
+      address: "0xdC6d44BFea70D9B5DeD61Bdb59c052F16B72F1f0"
       abi: Messaging
-      startBlock: 9959955
+      startBlock: 9960252
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -21,6 +21,6 @@ dataSources:
       eventHandlers:
         - event: MessageSent(address,string,uint256,address,uint256)
           handler: handleMessageSent
-        - event: ThreadCreated(address,address,uint256,uint256)
+        - event: ThreadCreated(address,address,uint256,uint256,string,string)
           handler: handleThreadCreated
       file: ./src/mapping.ts

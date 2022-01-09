@@ -104,6 +104,8 @@ export class Thread extends Entity {
     this.set("_sender", Value.fromBytes(Bytes.empty()));
     this.set("_thread_id", Value.fromBigInt(BigInt.zero()));
     this.set("_timestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("_sender_key", Value.fromString(""));
+    this.set("_receiver_key", Value.fromString(""));
   }
 
   save(): void {
@@ -166,5 +168,23 @@ export class Thread extends Entity {
 
   set _timestamp(value: BigInt) {
     this.set("_timestamp", Value.fromBigInt(value));
+  }
+
+  get _sender_key(): string {
+    let value = this.get("_sender_key");
+    return value!.toString();
+  }
+
+  set _sender_key(value: string) {
+    this.set("_sender_key", Value.fromString(value));
+  }
+
+  get _receiver_key(): string {
+    let value = this.get("_receiver_key");
+    return value!.toString();
+  }
+
+  set _receiver_key(value: string) {
+    this.set("_receiver_key", Value.fromString(value));
   }
 }

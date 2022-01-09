@@ -100,6 +100,8 @@ export function handleThreadCreated(eventTwo: ThreadCreated): void {
   entityTwo._sender = eventTwo.params.sender;
   entityTwo._thread_id = eventTwo.params.thread_id;
   entityTwo._timestamp = eventTwo.params.timestamp;
+  entityTwo._sender_key = eventTwo.params._sender_key;
+  entityTwo._receiver_key = eventTwo.params._receiver_key;
   entityTwo.save();
 
   // Note: If a handler doesn't require existing field values, it is faster

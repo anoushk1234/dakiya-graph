@@ -1,3 +1,16 @@
+# type _Schema_
+#   @fulltext(
+#     name: "messageSearch"
+#     language: en
+#     algorithm: rank
+#     include: [
+#       {
+#         entity: "Message"
+#         fields: [{ name: "_sender" }, { name: "_receiver" }]
+#       }
+#     ]
+#   )
+
 type Message @entity {
   id: ID!
   _receiver: Bytes! # uint256
@@ -13,4 +26,6 @@ type Thread @entity {
   _sender: Bytes!
   _thread_id: BigInt!
   _timestamp: BigInt!
+  _sender_key: String!
+  _receiver_key: String!
 }
