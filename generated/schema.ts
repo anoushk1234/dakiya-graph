@@ -16,10 +16,10 @@ export class Message extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("_receiver", Value.fromBytes(Bytes.empty()));
+    this.set("_receiver", Value.fromString(""));
     this.set("_uri", Value.fromString(""));
     this.set("_timestamp", Value.fromBigInt(BigInt.zero()));
-    this.set("_sender", Value.fromBytes(Bytes.empty()));
+    this.set("_sender", Value.fromString(""));
     this.set("_thread_id", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -49,13 +49,13 @@ export class Message extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get _receiver(): Bytes {
+  get _receiver(): string {
     let value = this.get("_receiver");
-    return value!.toBytes();
+    return value!.toString();
   }
 
-  set _receiver(value: Bytes) {
-    this.set("_receiver", Value.fromBytes(value));
+  set _receiver(value: string) {
+    this.set("_receiver", Value.fromString(value));
   }
 
   get _uri(): string {
@@ -76,13 +76,13 @@ export class Message extends Entity {
     this.set("_timestamp", Value.fromBigInt(value));
   }
 
-  get _sender(): Bytes {
+  get _sender(): string {
     let value = this.get("_sender");
-    return value!.toBytes();
+    return value!.toString();
   }
 
-  set _sender(value: Bytes) {
-    this.set("_sender", Value.fromBytes(value));
+  set _sender(value: string) {
+    this.set("_sender", Value.fromString(value));
   }
 
   get _thread_id(): BigInt {

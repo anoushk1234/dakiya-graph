@@ -36,10 +36,11 @@ export function handleMessageSent(eventOne: MessageSent): void {
 
   // EntityOne fields can be set based on eventOne parameters
   // entityOne.msg_id = eventOne.params.msg_id;
-  entityOne._receiver = eventOne.params.receiver;
+
+  entityOne._receiver = eventOne.params.receiver.toHexString();
   entityOne._uri = eventOne.params.uri;
   entityOne._timestamp = eventOne.params.timestamp;
-  entityOne._sender = eventOne.params.sender;
+  entityOne._sender = eventOne.params.sender.toHexString();
   entityOne._thread_id = eventOne.params.thread_id;
   entityOne.save();
 
