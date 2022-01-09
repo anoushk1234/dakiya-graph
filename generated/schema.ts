@@ -18,7 +18,6 @@ export class Message extends Entity {
 
     this.set("_receiver", Value.fromBytes(Bytes.empty()));
     this.set("_uri", Value.fromString(""));
-    this.set("_sender", Value.fromBytes(Bytes.empty()));
     this.set("_timestamp", Value.fromString(""));
   }
 
@@ -64,15 +63,6 @@ export class Message extends Entity {
 
   set _uri(value: string) {
     this.set("_uri", Value.fromString(value));
-  }
-
-  get _sender(): Bytes {
-    let value = this.get("_sender");
-    return value!.toBytes();
-  }
-
-  set _sender(value: Bytes) {
-    this.set("_sender", Value.fromBytes(value));
   }
 
   get _timestamp(): string {

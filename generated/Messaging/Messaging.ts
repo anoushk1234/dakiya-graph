@@ -27,52 +27,29 @@ export class MessageSent__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get sender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
   get uri(): string {
-    return this._event.parameters[2].value.toString();
+    return this._event.parameters[1].value.toString();
   }
 
   get timestamp(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
-export class Messaging__getMessagesResultValue0Struct extends ethereum.Tuple {
-  get receiver(): Address {
-    return this[0].toAddress();
+export class Messaging__getPubEncKeysResult {
+  value0: string;
+  value1: string;
+
+  constructor(value0: string, value1: string) {
+    this.value0 = value0;
+    this.value1 = value1;
   }
 
-  get uri(): string {
-    return this[1].toString();
-  }
-
-  get timestamp(): BigInt {
-    return this[2].toBigInt();
-  }
-}
-
-export class Messaging__getThreadResultValue0Struct extends ethereum.Tuple {
-  get thread_id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get receiver(): Address {
-    return this[1].toAddress();
-  }
-
-  get receiver_key(): string {
-    return this[2].toString();
-  }
-
-  get sender(): Address {
-    return this[3].toAddress();
-  }
-
-  get sender_key(): string {
-    return this[4].toString();
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromString(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    return map;
   }
 }
 
@@ -96,85 +73,96 @@ export class Messaging__messagesResult {
   }
 }
 
+export class Messaging__threadsResult {
+  value0: BigInt;
+  value1: Address;
+  value2: string;
+  value3: Address;
+  value4: string;
+
+  constructor(
+    value0: BigInt,
+    value1: Address,
+    value2: string,
+    value3: Address,
+    value4: string
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+    this.value4 = value4;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromAddress(this.value1));
+    map.set("value2", ethereum.Value.fromString(this.value2));
+    map.set("value3", ethereum.Value.fromAddress(this.value3));
+    map.set("value4", ethereum.Value.fromString(this.value4));
+    return map;
+  }
+}
+
 export class Messaging extends ethereum.SmartContract {
   static bind(address: Address): Messaging {
     return new Messaging("Messaging", address);
   }
 
-  getAllThreads(): Array<BigInt> {
-    let result = super.call("getAllThreads", "getAllThreads():(uint256[])", []);
+  checkUserRegistration(): boolean {
+    let result = super.call(
+      "checkUserRegistration",
+      "checkUserRegistration():(bool)",
+      []
+    );
 
-    return result[0].toBigIntArray();
+    return result[0].toBoolean();
   }
 
-  try_getAllThreads(): ethereum.CallResult<Array<BigInt>> {
+  try_checkUserRegistration(): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "getAllThreads",
-      "getAllThreads():(uint256[])",
+      "checkUserRegistration",
+      "checkUserRegistration():(bool)",
       []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  getMessages(
-    thread_id: BigInt
-  ): Array<Messaging__getMessagesResultValue0Struct> {
+  getPubEncKeys(receiver: Address): Messaging__getPubEncKeysResult {
     let result = super.call(
-      "getMessages",
-      "getMessages(uint256):((address,string,uint256)[])",
-      [ethereum.Value.fromUnsignedBigInt(thread_id)]
+      "getPubEncKeys",
+      "getPubEncKeys(address):(string,string)",
+      [ethereum.Value.fromAddress(receiver)]
     );
 
-    return result[0].toTupleArray<Messaging__getMessagesResultValue0Struct>();
+    return new Messaging__getPubEncKeysResult(
+      result[0].toString(),
+      result[1].toString()
+    );
   }
 
-  try_getMessages(
-    thread_id: BigInt
-  ): ethereum.CallResult<Array<Messaging__getMessagesResultValue0Struct>> {
+  try_getPubEncKeys(
+    receiver: Address
+  ): ethereum.CallResult<Messaging__getPubEncKeysResult> {
     let result = super.tryCall(
-      "getMessages",
-      "getMessages(uint256):((address,string,uint256)[])",
-      [ethereum.Value.fromUnsignedBigInt(thread_id)]
+      "getPubEncKeys",
+      "getPubEncKeys(address):(string,string)",
+      [ethereum.Value.fromAddress(receiver)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<Messaging__getMessagesResultValue0Struct>()
-    );
-  }
-
-  getThread(thread_id: BigInt): Messaging__getThreadResultValue0Struct {
-    let result = super.call(
-      "getThread",
-      "getThread(uint256):((uint256,address,string,address,string))",
-      [ethereum.Value.fromUnsignedBigInt(thread_id)]
-    );
-
-    return changetype<Messaging__getThreadResultValue0Struct>(
-      result[0].toTuple()
-    );
-  }
-
-  try_getThread(
-    thread_id: BigInt
-  ): ethereum.CallResult<Messaging__getThreadResultValue0Struct> {
-    let result = super.tryCall(
-      "getThread",
-      "getThread(uint256):((uint256,address,string,address,string))",
-      [ethereum.Value.fromUnsignedBigInt(thread_id)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      changetype<Messaging__getThreadResultValue0Struct>(value[0].toTuple())
+      new Messaging__getPubEncKeysResult(
+        value[0].toString(),
+        value[1].toString()
+      )
     );
   }
 
@@ -253,6 +241,43 @@ export class Messaging extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
+
+  threads(param0: BigInt): Messaging__threadsResult {
+    let result = super.call(
+      "threads",
+      "threads(uint256):(uint256,address,string,address,string)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return new Messaging__threadsResult(
+      result[0].toBigInt(),
+      result[1].toAddress(),
+      result[2].toString(),
+      result[3].toAddress(),
+      result[4].toString()
+    );
+  }
+
+  try_threads(param0: BigInt): ethereum.CallResult<Messaging__threadsResult> {
+    let result = super.tryCall(
+      "threads",
+      "threads(uint256):(uint256,address,string,address,string)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new Messaging__threadsResult(
+        value[0].toBigInt(),
+        value[1].toAddress(),
+        value[2].toString(),
+        value[3].toAddress(),
+        value[4].toString()
+      )
+    );
+  }
 }
 
 export class SendMessageCall extends ethereum.Call {
@@ -297,6 +322,36 @@ export class SendMessageCall__Outputs {
   _call: SendMessageCall;
 
   constructor(call: SendMessageCall) {
+    this._call = call;
+  }
+}
+
+export class SetPubEncKeyCall extends ethereum.Call {
+  get inputs(): SetPubEncKeyCall__Inputs {
+    return new SetPubEncKeyCall__Inputs(this);
+  }
+
+  get outputs(): SetPubEncKeyCall__Outputs {
+    return new SetPubEncKeyCall__Outputs(this);
+  }
+}
+
+export class SetPubEncKeyCall__Inputs {
+  _call: SetPubEncKeyCall;
+
+  constructor(call: SetPubEncKeyCall) {
+    this._call = call;
+  }
+
+  get encKey(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+}
+
+export class SetPubEncKeyCall__Outputs {
+  _call: SetPubEncKeyCall;
+
+  constructor(call: SetPubEncKeyCall) {
     this._call = call;
   }
 }

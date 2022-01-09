@@ -28,7 +28,7 @@ export function handleMessageSent(event: MessageSent): void {
   entity._receiver = event.params.receiver;
   entity._uri = event.params.uri;
   entity._timestamp = event.params.timestamp.toString();
-  entity._sender = event.params.sender;
+  // entity._sender = event.params.sender;
   // Entities can be written to the store with `.save()`
   entity.save();
 

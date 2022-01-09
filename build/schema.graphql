@@ -2,6 +2,6 @@ type Message @entity {
   id: ID!
   _receiver: Bytes! # uint256
   _uri: String! # address
-  _sender: Bytes! # uint256
+  # _sender: Bytes! # uint256
   _timestamp: String! # uint256
 }
