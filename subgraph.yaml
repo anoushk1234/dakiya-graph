@@ -6,9 +6,9 @@ dataSources:
     name: Messaging
     network: rinkeby
     source:
-      address: "0xdC6d44BFea70D9B5DeD61Bdb59c052F16B72F1f0"
+      address: "0x91f44Dda49A34ebed98e35211aEAF0719860BC68"
       abi: Messaging
-      startBlock: 9960252
+      startBlock: 9968105
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
