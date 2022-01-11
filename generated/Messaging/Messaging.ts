@@ -80,6 +80,10 @@ export class ThreadCreated__Params {
   get _receiver_key(): string {
     return this._event.parameters[5].value.toString();
   }
+
+  get _encrypted(): boolean {
+    return this._event.parameters[6].value.toBoolean();
+  }
 }
 
 export class Messaging__getPubEncKeysResult {
@@ -125,19 +129,22 @@ export class Messaging__threadsResult {
   value2: string;
   value3: Address;
   value4: string;
+  value5: boolean;
 
   constructor(
     value0: BigInt,
     value1: Address,
     value2: string,
     value3: Address,
-    value4: string
+    value4: string,
+    value5: boolean
   ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
     this.value4 = value4;
+    this.value5 = value5;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -147,6 +154,7 @@ export class Messaging__threadsResult {
     map.set("value2", ethereum.Value.fromString(this.value2));
     map.set("value3", ethereum.Value.fromAddress(this.value3));
     map.set("value4", ethereum.Value.fromString(this.value4));
+    map.set("value5", ethereum.Value.fromBoolean(this.value5));
     return map;
   }
 }
@@ -291,7 +299,7 @@ export class Messaging extends ethereum.SmartContract {
   threads(param0: BigInt): Messaging__threadsResult {
     let result = super.call(
       "threads",
-      "threads(uint256):(uint256,address,string,address,string)",
+      "threads(uint256):(uint256,address,string,address,string,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -300,14 +308,15 @@ export class Messaging extends ethereum.SmartContract {
       result[1].toAddress(),
       result[2].toString(),
       result[3].toAddress(),
-      result[4].toString()
+      result[4].toString(),
+      result[5].toBoolean()
     );
   }
 
   try_threads(param0: BigInt): ethereum.CallResult<Messaging__threadsResult> {
     let result = super.tryCall(
       "threads",
-      "threads(uint256):(uint256,address,string,address,string)",
+      "threads(uint256):(uint256,address,string,address,string,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -320,7 +329,8 @@ export class Messaging extends ethereum.SmartContract {
         value[1].toAddress(),
         value[2].toString(),
         value[3].toAddress(),
-        value[4].toString()
+        value[4].toString(),
+        value[5].toBoolean()
       )
     );
   }
@@ -361,6 +371,10 @@ export class SendMessageCall__Inputs {
 
   get _receiver_key(): string {
     return this._call.inputValues[4].value.toString();
+  }
+
+  get encrypted(): boolean {
+    return this._call.inputValues[5].value.toBoolean();
   }
 }
 

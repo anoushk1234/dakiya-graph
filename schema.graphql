@@ -28,4 +28,5 @@ type Thread @entity {
   _timestamp: BigInt!
   _sender_key: String!
   _receiver_key: String!
+  encrypted: Boolean!
 }

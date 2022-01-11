@@ -187,4 +187,13 @@ export class Thread extends Entity {
   set _receiver_key(value: string) {
     this.set("_receiver_key", Value.fromString(value));
   }
+
+  get encrypted(): boolean {
+    let value = this.get("encrypted");
+    return value!.toBoolean();
+  }
+
+  set encrypted(value: boolean) {
+    this.set("encrypted", Value.fromBoolean(value));
+  }
 }
