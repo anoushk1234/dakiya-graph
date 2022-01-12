@@ -103,62 +103,6 @@ export class Messaging__getPubEncKeysResult {
   }
 }
 
-export class Messaging__messagesResult {
-  value0: Address;
-  value1: string;
-  value2: BigInt;
-
-  constructor(value0: Address, value1: string, value2: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
-    map.set("value1", ethereum.Value.fromString(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    return map;
-  }
-}
-
-export class Messaging__threadsResult {
-  value0: BigInt;
-  value1: Address;
-  value2: string;
-  value3: Address;
-  value4: string;
-  value5: boolean;
-
-  constructor(
-    value0: BigInt,
-    value1: Address,
-    value2: string,
-    value3: Address,
-    value4: string,
-    value5: boolean
-  ) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-    this.value3 = value3;
-    this.value4 = value4;
-    this.value5 = value5;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromString(this.value2));
-    map.set("value3", ethereum.Value.fromAddress(this.value3));
-    map.set("value4", ethereum.Value.fromString(this.value4));
-    map.set("value5", ethereum.Value.fromBoolean(this.value5));
-    return map;
-  }
-}
-
 export class Messaging extends ethereum.SmartContract {
   static bind(address: Address): Messaging {
     return new Messaging("Messaging", address);
@@ -220,67 +164,6 @@ export class Messaging extends ethereum.SmartContract {
     );
   }
 
-  messages(param0: BigInt, param1: BigInt): Messaging__messagesResult {
-    let result = super.call(
-      "messages",
-      "messages(uint256,uint256):(address,string,uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
-    );
-
-    return new Messaging__messagesResult(
-      result[0].toAddress(),
-      result[1].toString(),
-      result[2].toBigInt()
-    );
-  }
-
-  try_messages(
-    param0: BigInt,
-    param1: BigInt
-  ): ethereum.CallResult<Messaging__messagesResult> {
-    let result = super.tryCall(
-      "messages",
-      "messages(uint256,uint256):(address,string,uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new Messaging__messagesResult(
-        value[0].toAddress(),
-        value[1].toString(),
-        value[2].toBigInt()
-      )
-    );
-  }
-
-  messagesIndex(): BigInt {
-    let result = super.call("messagesIndex", "messagesIndex():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_messagesIndex(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "messagesIndex",
-      "messagesIndex():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   threadCount(): BigInt {
     let result = super.call("threadCount", "threadCount():(uint256)", []);
 
@@ -294,45 +177,6 @@ export class Messaging extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  threads(param0: BigInt): Messaging__threadsResult {
-    let result = super.call(
-      "threads",
-      "threads(uint256):(uint256,address,string,address,string,bool)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-
-    return new Messaging__threadsResult(
-      result[0].toBigInt(),
-      result[1].toAddress(),
-      result[2].toString(),
-      result[3].toAddress(),
-      result[4].toString(),
-      result[5].toBoolean()
-    );
-  }
-
-  try_threads(param0: BigInt): ethereum.CallResult<Messaging__threadsResult> {
-    let result = super.tryCall(
-      "threads",
-      "threads(uint256):(uint256,address,string,address,string,bool)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new Messaging__threadsResult(
-        value[0].toBigInt(),
-        value[1].toAddress(),
-        value[2].toString(),
-        value[3].toAddress(),
-        value[4].toString(),
-        value[5].toBoolean()
-      )
-    );
   }
 }
 
